@@ -1,7 +1,17 @@
 /* config-overrides.js */
+// https://github.com/timarney/react-app-rewired
+// https://github.com/arackaf/customize-cra/blob/master/api.md#setwebpacktargettarget
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const rewireLess = require('react-app-rewire-less-modules')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const {
+  override,
+  addLessLoader,
+  addWebpackPlugin,
+  addWebpackAlias,
+  addBundleVisualizer,
+  overrideDevServer,
+  watchAll,
+  addPostcssPlugins
+} = require('customize-cra')
 const {
   resolve,
   makeAliasOfSrc,
@@ -12,7 +22,7 @@ const upyun = require('upyun')
 
 const {
   REACT_APP_TITLE,
-  REACT_APP_STATIC_URL,
+  // REACT_APP_STATIC_URL,
   UPYUN_WEB_SERVICE,
   UPYUN_WEB_OPERATOR,
   UPYUN_WEB_PASSWD,
@@ -22,44 +32,20 @@ const {
   REACT_IS_USE_CDN
 } = process.env
 
-module.exports = function override (config, env) {
-  // config = rewireLess(config, env)
-
-  // // with loaderOptions
-  // config = rewireLess.withLoaderOptions({
-  // })(config, env)
-
-  config.resolve.alias = {
-    ...makeAliasOfSrc
-  }
-
-  config.plugins.push(
-    new HtmlWebpackPlugin({
+module.exports = {
+  webpack: override(
+    addLessLoader(),
+    addPostcssPlugins([require('autoprefixer')]),
+    addPostcssPlugins([require('postcss-px2rem')({ remUnit: 37.5 })]),
+    addWebpackAlias(makeAliasOfSrc),
+    addWebpackPlugin(new HtmlWebpackPlugin({
       title: REACT_APP_TITLE,
       template: resolve('public/index.html'),
       filename: resolve('dist/index.html'),
       inject: true,
       alwaysWriteToDisk: true
-    })
-  )
-
-  // config.devServer = configFunction => {
-  //   return (proxy, allowedHost) => {
-  //     const config = configFunction(proxy, allowedHost)
-  //     config.proxy = {}
-  //   }
-  // }
-
-  if (env === 'production') {
-    config.output = {
-      // libraryTarget: 'umd',
-      path: resolve('dist'),
-      // filename: 'assets/js/[name].[contenthash:5].js',
-      // chunkFilename: 'assets/js/chunk.[name].[chunkhash:5].js',
-      publicPath: REACT_APP_STATIC_URL
-    }
-
-    isTrue(REACT_IS_USE_CDN) && config.plugins.push(
+    })),
+    isTrue(REACT_IS_USE_CDN) && addWebpackPlugin(
       new UpyunUploadPlugin({
         sdk: upyun,
         serviceName: UPYUN_WEB_SERVICE,
@@ -69,11 +55,11 @@ module.exports = function override (config, env) {
         filePath: REACT_CDN_FILE_PATH,
         openConfirm: false
       })
-    )
-
-    isTrue(REACT_BUILD_REPORT) && config.plugins.push(
-      new BundleAnalyzerPlugin()
-    )
-  }
-  return config
+    ),
+    isTrue(REACT_BUILD_REPORT) && addBundleVisualizer()
+  ),
+  devServer: overrideDevServer(
+    // dev server plugin
+    watchAll()
+  )
 }
