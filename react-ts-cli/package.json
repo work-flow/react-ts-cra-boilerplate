@@ -22,6 +22,8 @@
     "test": "react-app-rewired test",
     "lint:eslint": "eslint --cache --max-warnings 0  \"{src,mock}/**/*.{ts,tsx}\" --fix",
     "lint:stylelint": "stylelint --cache --fix \"src/**/*.{less,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
+    "lint": "npm run lint:eslint && npm run lint:stylelint",
+    "prepare": "husky install",
     "commit": "git-cz"
   },
   "eslintConfig": {
@@ -60,6 +62,7 @@
     "eslint-plugin-promise": "^5.1.1",
     "eslint-plugin-react": "^7.27.1",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^7.0.4",
     "less": "^4.1.2",
     "less-loader": "^7.3.0",
     "postcss": "^8.4.4",

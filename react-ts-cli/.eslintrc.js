@@ -4,6 +4,7 @@ module.exports = {
     es2021: true
   },
   extends: [
+    'eslint:recommended',
     'plugin:react/recommended',
     'standard'
   ],
@@ -24,6 +25,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'no-use-before-define': 'off',
     'no-new': 'off',
+    'new-cap': 'off',
     'no-debugger': 'off'
   }
 }

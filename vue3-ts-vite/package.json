@@ -8,6 +8,7 @@
     "serve": "vite preview",
     "lint:eslint": "eslint --cache --max-warnings 0  \"{src,mock}/**/*.{vue,ts,tsx}\" --fix",
     "lint:stylelint": "stylelint --cache --fix \"src/**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
+    "lint": "npm run lint:eslint && npm run lint:stylelint",
     "prepare": "husky install",
     "commit": "git-cz"
   },

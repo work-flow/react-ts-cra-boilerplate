@@ -1,29 +1,31 @@
 module.exports = {
   env: {
     browser: true,
-    es6: true
+    es2021: true
   },
   extends: [
-    'plugin:vue/vue3-recommended',
-    'plugin:vue/essential',
-    // 'plugin:@typescript-eslint/recommended',
+    'eslint:recommended',
+    'plugin:react/recommended',
     'standard'
   ],
-  globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
-  },
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2018,
-    parser: '@typescript-eslint/parser',
+    ecmaFeatures: {
+      jsx: true
+    },
+    ecmaVersion: 13,
     sourceType: 'module'
   },
   plugins: [
-    'vue',
+    'react',
     '@typescript-eslint'
   ],
   rules: {
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'no-use-before-define': 'off',
     'no-new': 'off',
+    'new-cap': 'off',
     'no-debugger': 'off'
   }
 }
